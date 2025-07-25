@@ -1,0 +1,97 @@
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap");
+
+* {
+  box-sizing: border-box;
+  padding: 0px;
+  margin: 0px;
+  list-style-type: none;
+  scroll-behavior: smooth;
+  text-decoration: none;
+  transition: 0.3s ease-in-out;
+  line-height: 1;
+  border: none;
+  outline: none;
+  z-index: 182;
+  font-family: "Open Sans", sans-serif;
+}
+
+body {
+  display: flex;
+}
+
+.produits {
+  padding: 80px;
+}
+
+.card {
+  width: 320px;
+  border: 1px solid #bdbdbd;
+  border-radius: 8px;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  margin-bottom: 12px;
+  cursor: pointer;
+}
+
+.card img {
+  width: 60px;
+  height: 60px;
+  margin-right: 12px;
+  border-radius: 8px;
+}
+
+.card h1 {
+  font-size: 14px;
+  font-weight: 700;
+  display: flex;
+  line-height: 1;
+  color: #bdbdbd;
+}
+
+.card span {
+  color: #6b6b6b;
+  font-weight: 700;
+  font-size: 14px;
+  margin-top: 6px;
+  margin-bottom: 6px;
+  display: flex;
+}
+
+input {
+  width: 320px;
+  border: 1px solid #bdbdbd;
+  border-radius: 8px;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.ticket .inner {
+  width: 384px;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  padding-top: 34px;
+  padding-bottom: 34px;
+  margin-left: 36px;
+  margin-right: 28px;
+}
+
+.ticket .infos p {
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  font-weight: 700;
+  font-size: 10pt;
+}
+
+.ticket .inner img {
+  display: flex;
+  margin-left: auto;
+  margin-right: auto;
+  justify-content: center;
+  text-align: center;
+  margin-bottom: 12px;
+}
