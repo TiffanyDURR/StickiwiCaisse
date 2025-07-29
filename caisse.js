@@ -44,7 +44,7 @@ function search() {
     `
       )
       .join("");
-    addToBasket(); 
+    addToBasket();
     if (filtered.length === 1 && value === filtered[0].id.toLowerCase()) {
       const event = new Event("click");
       document.getElementById(filtered[0].id).dispatchEvent(event);
@@ -194,6 +194,26 @@ const totalAPayerDiv = document.querySelector(".totalapayer");
 const inputSommeDonnee = document.getElementById("somme-donnee");
 const sommeARendreDiv = document.getElementById("sommearendre");
 
+const btnCB = document.getElementById("cartebancaire");
+const btnEspece = document.getElementById("espece");
+const modeReglementDiv = document.getElementById("mode-reglement");
+const montantRemisDiv = document.getElementById("montant-remis");
+const sommeRendueDiv = document.getElementById("somme-rendue");
+
+let moyenPaiement = "";
+
+btnCB.addEventListener("click", () => {
+  moyenPaiement = "Carte bancaire";
+  modeReglementDiv.textContent = moyenPaiement;
+  updateTotaux();
+});
+
+btnEspece.addEventListener("click", () => {
+  moyenPaiement = "Espèce";
+  modeReglementDiv.textContent = moyenPaiement;
+  updateTotaux();
+});
+
 function updateTotaux() {
   const prixTotal = dataBasket.reduce((acc, item) => acc + item.prix * item.quantite, 0);
   totalAPayerDiv.textContent = `${prixTotal.toFixed(2)} €`;
@@ -201,13 +221,18 @@ function updateTotaux() {
   const valeurEntree = parseFloat(inputSommeDonnee.value.trim().replace(",", "."));
   if (!isNaN(valeurEntree)) {
     const rendu = valeurEntree - prixTotal;
+    montantRemisDiv.textContent = `${valeurEntree.toFixed(2)} €`;
     if (rendu < 0) {
       sommeARendreDiv.textContent = `Manque : ${Math.abs(rendu).toFixed(2)} €`;
+      sommeRendueDiv.textContent = "-";
     } else {
       sommeARendreDiv.textContent = `À rendre : ${rendu.toFixed(2)} €`;
+      sommeRendueDiv.textContent = `${rendu.toFixed(2)} €`;
     }
   } else {
     sommeARendreDiv.textContent = "";
+    montantRemisDiv.textContent = "";
+    sommeRendueDiv.textContent = "";
   }
 }
 
@@ -218,3 +243,4 @@ displayBasket = function () {
   oldDisplayBasket();
   updateTotaux();
 };
+
