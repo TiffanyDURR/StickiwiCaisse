@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Stickiwi - Barcode</title>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap");
+
+      * {
+        box-sizing: border-box;
+        padding: 0px;
+        margin: 0px;
+        list-style-type: none;
+        scroll-behavior: smooth;
+        text-decoration: none;
+        transition: 0.3s ease-in-out;
+        line-height: 1;
+        border: none;
+        outline: none;
+        z-index: 182;
+        font-family: "Open Sans", sans-serif;
+        font-weight: 600;
+        letter-spacing: 1px;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        white-space: normal;
+        font-size: 13px;
+        background-color: #ffffff;
+        color: #e39596;
+      }
+
+      ::placeholder {
+        color: #e39596;
+      }
+
+      html,
+      body,
+      h1 {
+        background-color: #fcecb3;
+      }
+
+      input,
+      button {
+        font-size: 1rem;
+        padding: 8px;
+        margin: 5px 0;
+      }
+
+      #barcode-wrapper {
+        display: inline-block;
+        padding: 20px;
+        background: white;
+        border: 1px solid #ccc;
+        font-family: monospace;
+        margin-top: 20px;
+      }
+
+      #barcode {
+        display: flex;
+        height: 140px;
+        margin-bottom: 10px;
+      }
+
+      .bar {
+        background: black;
+        height: 100%;
+      }
+
+      .space {
+        background: transparent;
+        height: 100%;
+      }
+
+      #barcode-infos {
+        text-align: center;
+        font-size: 16px;
+        line-height: 1.2;
+      }
+
+      #barcode-canvas {
+        display: none;
+      }
+
+      h1 {
+        font-size: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 40px;
+        font-weight: 800;
+      }
+
+      input {
+        background-color: #fff6d8;
+        padding: 12px;
+        display: inline-flex;
+        height: 60px;
+        border-radius: 12px;
+        width: 240px;
+        margin-left: 8px;
+        margin-right: 8px;
+        font-weight: 800;
+        align-items: center;
+      }
+
+      .inputs,
+      .buttons {
+        background-color: #fcecb3;
+        display: flex;
+        justify-content: center;
+      }
+
+      button {
+        background-color: #fff6d8;
+        padding: 12px;
+        display: inline-flex;
+        height: 60px;
+        border-radius: 12px;
+        width: 240px;
+        margin-left: 8px;
+        margin-right: 8px;
+        font-weight: 800;
+        align-items: center;
+        text-align: center;
+        justify-content: center;
+        background-color: #e39596;
+        color: #fff6d8;
+      }
+
+      canvas {
+        display: flex;
+      }
+
+      #barcode-wrapper {
+        display: flex;
+        justify-content: center;
+        text-align: center;
+        flex-direction: column;
+        width: 578px;
+        margin-left: auto;
+        margin-right: auto;
+        border: 2px dashed #e39596;
+        border-radius: 24px;
+      }
+
+      #code-affiche {
+        color: #000000;
+        font-size: 16px;
+        letter-spacing: 2px;
+      }
+
+      #barcode-infos div {
+        display: flex;
+        justify-content: space-between;
+      }
+
+      #nom-affiche,
+      #prix-affiche {
+        color: #000000;
+        margin-top: 12px;
+      }
+
+      #nom-affiche {
+        width: 100%;
+        max-width: 420px;
+        text-align: left;
+      }
+
+      .telecharger {
+        background-color: #fcecb3;
+        display: flex;
+        justify-content: center;
+        text-align: center;
+        margin-top: 24px;
+      }
+
+      .telecharger button {
+        background-color: #e39596;
+        color: #fff6d8;
+        font-size: 18px;
+      }
+
+      .logo {
+        display: flex;
+        justify-content: center;
+        background-color: #fcecb3;
+      }
+
+      .logo img {
+        background-color: #fcecb3;
+        margin-top: 40px;
+      }
+
+      #barcode {
+        margin-bottom: 24px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="logo">
+      <img src="https://www.stickiwi.fr/wp-content/themes/stickiwi/logo-mini-hor.png" alt="" />
+    </div>
+    <h1>Générateur de code-barres</h1>
+
+    <div class="inputs">
+      <input id="nom-du-produit" placeholder="Nom produit" />
+      <input type="text" id="tarif" placeholder="Tarif" />
+      <input type="text" id="input" placeholder="Code produit" />
+    </div>
+
+    <div class="buttons">
+      <button onclick="genererEtAfficher()">Générer un code aléatoire</button>
+      <button onclick="generateBarcode()">Générer le code-barres</button>
+    </div>
+
+    <div id="barcode-wrapper">
+      <div id="barcode"></div>
+      <div id="barcode-infos">
+        <p id="code-affiche"></p>
+        <div>
+          <p id="nom-affiche"></p>
+          <p id="prix-affiche"></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="telecharger">
+      <button onclick="downloadCanvas()">Télécharger</button>
+    </div>
+
+    <canvas id="barcode-canvas"></canvas>
+
+    <script>
+      const CODE128_PATTERNS = [
+        "212222",
+        "222122",
+        "222221",
+        "121223",
+        "121322",
+        "131222",
+        "122213",
+        "122312",
+        "132212",
+        "221213",
+        "221312",
+        "231212",
+        "112232",
+        "122132",
+        "122231",
+        "113222",
+        "123122",
+        "123221",
+        "223211",
+        "221132",
+        "221231",
+        "213212",
+        "223112",
+        "312131",
+        "311222",
+        "321122",
+        "321221",
+        "312212",
+        "322112",
+        "322211",
+        "212123",
+        "212321",
+        "232121",
+        "111323",
+        "131123",
+        "131321",
+        "112313",
+        "132113",
+        "132311",
+        "211313",
+        "231113",
+        "231311",
+        "112133",
+        "112331",
+        "132131",
+        "113123",
+        "113321",
+        "133121",
+        "313121",
+        "211331",
+        "231131",
+        "213113",
+        "213311",
+        "213131",
+        "311123",
+        "311321",
+        "331121",
+        "312113",
+        "312311",
+        "332111",
+        "314111",
+        "221411",
+        "431111",
+        "111224",
+        "111422",
+        "121124",
+        "121421",
+        "141122",
+        "141221",
+        "112214",
+        "112412",
+        "122114",
+        "122411",
+        "142112",
+        "142211",
+        "241211",
+        "221114",
+        "413111",
+        "241112",
+        "134111",
+        "111242",
+        "121142",
+        "121241",
+        "114212",
+        "124112",
+        "124211",
+        "411212",
+        "421112",
+        "421211",
+        "212141",
+        "214121",
+        "412121",
+        "111143",
+        "111341",
+        "131141",
+        "114113",
+        "114311",
+        "411113",
+        "411311",
+        "113141",
+        "114131",
+        "311141",
+        "411131",
+        "211412",
+        "211214",
+        "211232",
+        "2331112",
+      ];
+
+      const CODE128B_MAP = {};
+      for (let i = 32; i <= 127; i++) {
+        CODE128B_MAP[String.fromCharCode(i)] = i - 32;
+      }
+
+      function getCode128BValues(text) {
+        const values = [];
+        for (let char of text) {
+          if (!(char in CODE128B_MAP)) {
+            alert(`Caractère non supporté : "${char}"`);
+            return null;
+          }
+          values.push(CODE128B_MAP[char]);
+        }
+        return values;
+      }
+
+      function calculateChecksum(codeValues) {
+        let sum = 104; // START B
+        for (let i = 0; i < codeValues.length; i++) {
+          sum += codeValues[i] * (i + 1);
+        }
+        return sum % 103;
+      }
+
+      function drawBarcode(patterns) {
+        const barcode = document.getElementById("barcode");
+        barcode.innerHTML = "";
+        const unit = 4;
+
+        for (let pattern of patterns) {
+          for (let i = 0; i < pattern.length; i++) {
+            const width = parseInt(pattern[i]) * unit;
+            const bar = document.createElement("div");
+            bar.style.width = `${width}px`;
+            bar.className = i % 2 === 0 ? "bar" : "space";
+            barcode.appendChild(bar);
+          }
+        }
+      }
+
+      function drawBarcodeToCanvas(patterns) {
+        const unit = 4;
+        const canvas = document.getElementById("barcode-canvas");
+        const ctx = canvas.getContext("2d");
+
+        const nom = document.getElementById("nom-du-produit").value;
+        const tarif = document.getElementById("tarif").value;
+        const code = document.getElementById("input").value;
+
+        const totalUnits = patterns.map((p) => [...p].reduce((sum, digit) => sum + parseInt(digit), 0)).reduce((a, b) => a + b, 0);
+        const width = totalUnits * unit;
+
+        const heightBarcode = 140;
+        const marginBottomBarcode = 24;
+        const marginTopText = 12;
+        const lineHeight = 20;
+
+        let totalTextHeight = 0;
+        if (code) totalTextHeight += lineHeight;
+        if (nom || tarif) totalTextHeight += marginTopText + lineHeight;
+
+        const height = heightBarcode + marginBottomBarcode + totalTextHeight;
+
+        canvas.width = width;
+        canvas.height = height;
+
+        // Fond blanc
+        ctx.fillStyle = "#ffffff";
+        ctx.fillRect(0, 0, width, height);
+
+        // Code-barres
+        let x = 0;
+        for (let pattern of patterns) {
+          for (let i = 0; i < pattern.length; i++) {
+            const w = parseInt(pattern[i]) * unit;
+            if (i % 2 === 0) {
+              ctx.fillStyle = "#000000";
+              ctx.fillRect(x, 0, w, heightBarcode);
+            }
+            x += w;
+          }
+        }
+
+        // Texte
+        ctx.fillStyle = "#000000";
+        ctx.font = "600 16px 'Open Sans', sans-serif";
+        ctx.textBaseline = "top";
+
+        let currentY = heightBarcode + marginBottomBarcode;
+
+        // Code centré
+        if (code) {
+          ctx.textAlign = "center";
+          ctx.fillText(code, width / 2, currentY);
+          currentY += lineHeight;
+        }
+
+        // Nom et prix sur la même ligne
+        if (nom || tarif) {
+          currentY += marginTopText;
+          if (nom) {
+            ctx.textAlign = "left";
+            ctx.fillText(nom, 0, currentY);
+          }
+          if (tarif) {
+            ctx.textAlign = "right";
+            ctx.fillText(tarif + " €", width, currentY);
+          }
+        }
+      }
+
+      function generateBarcode() {
+        const input = document.getElementById("input").value;
+        const nom = document.getElementById("nom-du-produit").value;
+        const tarif = document.getElementById("tarif").value;
+
+        if (!input) return;
+
+        const codeValues = getCode128BValues(input);
+        if (!codeValues) return;
+
+        const checksum = calculateChecksum(codeValues);
+        const fullSequence = [104, ...codeValues, checksum, 106];
+
+        const patterns = fullSequence.map((v) => CODE128_PATTERNS[v]);
+        drawBarcode(patterns);
+        drawBarcodeToCanvas(patterns);
+
+        document.getElementById("code-affiche").innerText = input;
+        document.getElementById("nom-affiche").innerText = nom;
+        document.getElementById("prix-affiche").innerText = tarif ? tarif + " €" : "";
+      }
+
+      function sanitizeFilename(text) {
+        return text
+          .normalize("NFD") // Décompose accents (é -> e +  ́)
+          .replace(/[\u0300-\u036f]/g, "") // Supprime les diacritiques
+          .replace(/['"`’]/g, " ") // Remplace les apostrophes
+          .replace(/[^a-zA-Z0-9 ]/g, "") // Supprime tout le reste sauf lettres/chiffres/espaces
+          .trim()
+          .replace(/\s+/g, "_") // Espaces → underscores
+          .toLowerCase(); // (optionnel) tout en minuscules
+      }
+
+      function downloadCanvas() {
+        const canvas = document.getElementById("barcode-canvas");
+        const nomProduit = document.getElementById("nom-du-produit").value || "barcode";
+
+        const filename = sanitizeFilename(nomProduit) || "barcode";
+        const link = document.createElement("a");
+        link.download = `${filename}.png`;
+        link.href = canvas.toDataURL("image/png");
+        link.click();
+      }
+
+      function genererCodeAleatoire(length = 9) {
+        const chars = "abcdefghijklmnopqrstuvwxyz1234567890";
+        let code = "";
+        for (let i = 0; i < length; i++) {
+          code += chars.charAt(Math.floor(Math.random() * chars.length));
+        }
+        return code;
+      }
+
+      function genererEtAfficher() {
+        const code = genererCodeAleatoire();
+        document.getElementById("input").value = code;
+        generateBarcode();
+      }
+    </script>
+  </body>
+</html>
