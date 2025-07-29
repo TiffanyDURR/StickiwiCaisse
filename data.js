@@ -1,5 +1,12 @@
 export const produits = [
   {
+    titre: `Sachet`,
+    id: `sachet`,
+    prix: `0.05`,
+    quantite: `0`,
+    image: `https://stickiwi1.odoo.com/web/image/product.template/13/image_128?unique=1753230492000`,
+  },
+  {
     titre: `Pack badges – Potions & Dragons`,
     id: `col1badges`,
     prix: `4.8`,

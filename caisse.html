@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Stickiwi - Ticket de caisse</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="produits">
+      <div class="liste-produits">
+        <h1 class="main-title">Stickiwi - Caisse</h1>
+        <input type="text" placeholder="Rechercher" id="search" />
+        <div class="ajout-personnalise">
+          <input type="text" id="input-titre" placeholder="Titre" />
+          <input type="text" id="input-prix" placeholder="Prix" />
+          <button id="ajouter-personnalise">Ajouter</button>
+        </div>
+        <div id="produits"></div>
+      </div>
+      <div class="calcul">
+        <div class="main-title maintit2">Total à payer</div>
+        <div class="totalapayer"></div>
+        <p>Somme donnée par le client</p>
+        <input type="text" id="somme-donnee" />
+        <span>Différence</span>
+        <div id="sommearendre"></div>
+      </div>
+    </div>
+
+    <div class="ticket">
+      <div class="inner">
+        <div class="infos">
+          <img src="logo.jpg" alt="" />
+          <p>stickiwi.fr</p>
+          <p>hello@stickiwi.fr</p>
+          <p>07 68 88 87 91</p>
+        </div>
+        <h2>Ticket de caisse</h2>
+        <div id="date">Date du ticket</div>
+        <div id="panier"></div>
+        <div class="total">
+          <span>Montant total : </span>
+          <div id="prix-a-payer"></div>
+        </div>
+        <div class="valider">Valider</div>
+        <div class="legals">
+          <p>Siret : 88465191000033</p>
+          <p>Code APE : 7410Z</p>
+          <p>TVA Non Applicable</p>
+          <p>Article 293 B du CGI</p>
+          <p class="special">Dispensé d'immatriculation au registre du commerce et des sociétés et au répertoire des métiers.</p>
+        </div>
+      </div>
+    </div>
+
+    <script type="module" src="caisse.js"></script>
+  </body>
+</html>
