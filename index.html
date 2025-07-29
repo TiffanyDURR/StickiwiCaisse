@@ -25,6 +25,11 @@
         <input type="text" id="somme-donnee" />
         <span>Différence</span>
         <div id="sommearendre"></div>
+        <p>Moyen de paiement</p>
+        <div class="moyens-paiement">
+          <button id="cartebancaire">Carte Bancaire</button>
+          <button id="espece">Espèce</button>
+        </div>
       </div>
     </div>
 
@@ -43,6 +48,11 @@
           <span>Montant total : </span>
           <div id="prix-a-payer"></div>
         </div>
+        <div class="infos-paiement">
+          <p>Mode de réglement : <span id="mode-reglement"></span></p>
+          <p>Montant remis par le client : <span id="montant-remis"></span></p>
+          <p>Somme rendue : <span id="somme-rendue"></span></p>
+        </div>
         <div class="valider">Valider</div>
         <div class="legals">
           <p>Siret : 88465191000033</p>
@@ -53,6 +63,7 @@
         </div>
       </div>
     </div>
+
 
     <script type="module" src="https://tiffanydurr.github.io/StickiwiCaisse/caisse.js"></script>
   </body>
