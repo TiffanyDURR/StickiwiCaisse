@@ -44,7 +44,7 @@ function search() {
     `
       )
       .join("");
-    addToBasket(); // Ajoute les écouteurs à la nouvelle liste affichée
+    addToBasket(); 
     if (filtered.length === 1 && value === filtered[0].id.toLowerCase()) {
       const event = new Event("click");
       document.getElementById(filtered[0].id).dispatchEvent(event);
