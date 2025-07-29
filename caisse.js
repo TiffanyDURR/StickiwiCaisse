@@ -1,4 +1,4 @@
-import { produits } from "../data.js";
+import { produits } from "https://tiffanydurr.github.io/StickiwiCaisse/data.js";
 
 const produitsContainer = document.getElementById("produits");
 const basketContainer = document.getElementById("panier");
